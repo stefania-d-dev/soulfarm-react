@@ -1,11 +1,32 @@
-@tailwind base;
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;700&display=swap');
-@tailwind components;
-@tailwind utilities;
+/* 1. Importazione nativa di Tailwind 4 */
+@import "tailwindcss";
 
+/* 2. Importazione font esterni (Google Fonts) */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;700&display=swap');
+
+/* 3. Definizione del tema e dei font custom */
+@theme {
+  /* Registriamo il font Lexend */
+  --font-lexend: "Lexend", sans-serif;
+  
+  /* Registriamo il font custom MADE Dillan */
+  --font-dillan: "MADE Dillan", serif;
+
+  /* Esempio: aggiungiamo il tuo colore brand così lo usi come 'text-brand-green' */
+  --color-brand-green: #216545;
+}
+
+/* 4. Caricamento fisico del file font */
 @font-face {
   font-family: "MADE Dillan";
   src: url("./assets/fonts/MADE Dillan.woff") format("woff");
   font-weight: normal;
   font-style: normal;
+  font-display: swap; /* Ottimizzazione per il caricamento */
+}
+
+/* 5. (Opzionale) Applichiamo il font di default al body */
+body {
+  font-family: var(--font-lexend);
+  @apply antialiased;
 }

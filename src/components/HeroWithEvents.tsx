@@ -4,45 +4,49 @@ import EventsGrid from "./EventsGrid";
 
 const HeroWithEvents: React.FC = () => {
   return (
-    <div className="relative">
+    <div className="relative w-full">
       {/* Sezione Hero */}
-      <section className="relative flex self-stretch h-[944px] overflow-hidden">
-        <div className="absolute inset-0 w-1/2 bg-gradient-to-r from-white via-white/90 to-transparent z-10"></div>
+      <section className="relative flex h-236 w-full overflow-hidden self-stretch">
+        
+        {/* Overlay sfumato: migliorata la transizione per leggibilità testo */}
+        <div className="absolute inset-0 z-10 w-1/2 bg-linear-to-r from-white via-white/95 to-transparent" />
 
-        <div className="relative z-20 flex justify-center items-center w-[800px] px-20 py-10">
-          <div className="w-[640px] flex flex-col justify-center gap-4">
-            <h1
-              className="text-[100px] leading-[1.1] text-[#1c1c1c]"
-              style={{ fontFamily: "MADE Dillan", fontWeight: "normal" }}
-            >
-              <span className="bg-gradient-to-b from-[#56D698] to-[#3C8D3A] bg-clip-text text-transparent">
+        <div className="relative z-20 flex w-full max-w-200 items-center px-6 lg:px-20">
+          <div className="flex flex-col justify-center gap-6">
+            <h1 className="font-dillan text-[60px] leading-[1.1] text-zinc-900 md:text-[80px] lg:text-[100px]">
+              <span className="bg-linear-to-b from-green-400 to-emerald-700 bg-clip-text text-transparent">
                 Soulfarm
-              </span>{" "}
-              <br /> Agricoltura <br /> Familiare
+              </span>
+              <br /> 
+              Agricoltura <br /> 
+              Familiare
             </h1>
-            <p
-              className="font-bold text-[18px] leading-[26px] text-[#1c1c1c]"
-              style={{ fontFamily: "Lexend, sans-serif", fontWeight: "700" }}
-            >
-              L’azienda è certificata biologica ed è<br/> 
-              composta da orto, frutteto<br/> 
+            
+            <p className="font-lexend text-[18px] font-bold leading-6.5 text-zinc-800 lg:text-[20px]">
+              L’azienda è certificata biologica ed è<br className="hidden md:block" /> 
+              composta da orto, frutteto<br className="hidden md:block" /> 
               e pascolo.
             </p>
           </div>
         </div>
 
-        {/* Immagine Hero */}
+        {/* Immagine Hero: Caricamento ottimizzato */}
         <div className="absolute inset-0">
           <img
             src={heroBg}
-            alt="Paesaggio agricolo"
-            className="w-full h-full object-cover"
+            alt="Paesaggio agricolo Soulfarm"
+            className="h-full w-full object-cover object-center"
+            loading="eager" // Fondamentale per la Hero: carica subito
+            decoding="async"
           />
         </div>
       </section>
 
-      <div className="relative -mt-20 z-10 rounded-2xl shadow-lg p-8">
-        <EventsGrid />
+      {/* Grid Eventi: Margine negativo per effetto overlap */}
+      <div className="relative z-30 -mt-24 px-6 lg:px-20">
+        <div className="rounded-3xl bg-white p-8 shadow-2xl ring-1 ring-black/5">
+          <EventsGrid />
+        </div>
       </div>
     </div>
   );
