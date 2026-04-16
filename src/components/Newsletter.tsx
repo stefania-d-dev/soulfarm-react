@@ -3,58 +3,87 @@ import newsletterImage from '../assets/images/newsletter-image.png';
 import mailSvg from '../assets/images/mail.svg';
 
 const Newsletter: React.FC = () => {
-    const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
 
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        console.log('Email submitted:', email);
-        setEmail('');
-    };
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setStatus('loading');
+    
+    // Simuliamo un invio (ottimo per far vedere come gestisci gli stati asincroni)
+    console.log('Email submitted:', email);
+    
+    setTimeout(() => {
+      setStatus('success');
+      setEmail('');
+      setTimeout(() => setStatus('idle'), 3000);
+    }, 1000);
+  };
 
-    return (
-        <div className="flex flex-col justify-center items-center gap-10 self-stretch bg-[#f8f1e2] p-20">
-            <div
-                className="flex flex-col justify-center items-center gap-6 self-stretch bg-white px-10 py-[120px] rounded-2xl"
-                style={{
-                    backgroundImage: `url(${newsletterImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                }}
-            >
-                <div className="flex flex-col justify-center items-center gap-4">
-                    <span
-                        className="font-normal text-[40px] text-center text-white"
-                        style={{ fontFamily: "MADE Dillan, sans-serif" }}
-                    >
-                        Rimani aggiornato
-                    </span>
-                    <span className="font-normal text-base text-center text-white font-lexend">
-                        Per non perderti nessuna novità!
-                    </span>
-                </div>
-                <form onSubmit={handleSubmit} className="relative mx-auto flex items-center w-full max-w-[535px] mt-[8px] z-10 rounded-[40px] border border-[#e0e0e0] bg-white h-[64px]">
-                    <div className="relative flex items-center gap-2 pl-6 h-full">
-                        <div className="absolute left-4 md:left-6 w-8 h-[31px] flex items-center justify-center">
-                            <img src={mailSvg} alt="Email Icon" className="w-full h-full text-black" style={{ maxWidth: '32px', maxHeight: '31px' }} />
-                        </div>
-                        <input
-                            type="email"
-                            className="w-full font-normal text-[16px] leading-[25px] text-left text-[#333333] font-lexend outline-none py-3 pl-[56px] md:pl-[64px] h-full rounded-[40px] placeholder-gray-400"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="right-[8px] justify-center items-center baseToMd:mt-[12px] md:absolute flex cursor-pointer font-lexend font-bold bg-[#d1f864] text-[#1a1a1a] rounded-[40px] h-[48px] w-[113px]"
-                        style={{ fontSize: '16px' }}
-                    >Iscriviti</button>
-                </form>
+  return (
+    <section className="w-full bg-[#f8f1e2] px-6 py-20 lg:px-20">
+      <div
+        className="relative flex flex-col items-center justify-center overflow-hidden rounded-3xl bg-zinc-800 px-6 py-24 shadow-xl lg:py-32"
+        style={{
+          backgroundImage: `url(${newsletterImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Overlay per la leggibilità del testo */}
+        <div className="absolute inset-0 bg-black/40 z-0" />
+
+        <div className="relative z-10 flex flex-col items-center gap-8 w-full">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <h2 className="font-dillan text-4xl text-white lg:text-5xl">
+              Rimani aggiornato
+            </h2>
+            <p className="font-lexend text-lg text-emerald-50">
+              Per non perderti nessuna novità dal mondo Soulfarm!
+            </p>
+          </div>
+
+          <form 
+            onSubmit={handleSubmit} 
+            className="group relative flex w-full max-w-135 items-center overflow-hidden rounded-full bg-white p-1.5 shadow-lg transition-all focus-within:ring-2 focus-within:ring-[#d1f864]"
+          >
+            {/* Icona Mail */}
+            <div className="absolute left-6 flex h-6 w-6 items-center justify-center opacity-50">
+              <img src={mailSvg} alt="" aria-hidden="true" className="h-full w-full" />
             </div>
+
+            <input
+              type="email"
+              placeholder="Inserisci la tua email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full bg-transparent py-4 pl-14 pr-32 font-lexend text-zinc-900 outline-none placeholder:text-zinc-400"
+              disabled={status === 'loading'}
+            />
+
+            <button
+              type="submit"
+              disabled={status !== 'idle'}
+              className={`absolute right-1.5 h-13 w-30 rounded-full font-lexend font-bold transition-all active:scale-95 
+                ${status === 'success' 
+                  ? 'bg-emerald-500 text-white' 
+                  : 'bg-[#d1f864] text-zinc-900 hover:bg-[#c1e854]'
+                }`}
+            >
+              {status === 'loading' ? '...' : status === 'success' ? 'Fatto!' : 'Iscriviti'}
+            </button>
+          </form>
+
+          {status === 'success' && (
+            <p className="absolute -bottom-10 font-lexend text-white text-sm animate-fade-in">
+              Grazie! Ti sei iscritto correttamente.
+            </p>
+          )}
         </div>
-    );
+      </div>
+    </section>
+  );
 };
 
 export default Newsletter;
